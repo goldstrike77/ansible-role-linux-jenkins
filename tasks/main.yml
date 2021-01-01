@@ -1,0 +1,19 @@
+---
+- name: Include tasks for specific OS.
+  include: '{{ ansible_os_family }}.yml'
+
+- name: Include firewall tasks.
+  include: 'firewall.yml'
+
+- name: Include installation tasks.
+  include: 'install.yml'
+  notify:
+    - Restart Jenkins service.
+
+- name: Include configuration tasks.
+  include: 'configureation.yml'
+  notify:
+    - Restart Jenkins service.
+
+- name: Flush handlers.
+  meta: flush_handlers

@@ -1,0 +1,17 @@
+---
+- name: Jenkins configuration file transfer.
+  template:
+    src: 'wrapper.conf.j2'
+    dest: '{{ jenkins_path }}/jenkins/conf/wrapper.conf'
+    backup: 'yes'
+    owner: '{{ jenkins_arg.user }}'
+    group: '{{ jenkins_arg.user }}'
+    mode: '0640'
+
+- name: Jenkins systemd service file transfer.
+  template:
+    src: 'jenkins.service.j2'
+    dest: '/lib/systemd/system/jenkins.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'

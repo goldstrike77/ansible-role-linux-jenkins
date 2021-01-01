@@ -1,0 +1,13 @@
+---
+jenkins_soft_url: 'http://mirrors.tuna.tsinghua.edu.cn/jenkins'
+
+jenkins_support_jars:
+  - 'libwrapper.so'
+  - 'wrapper.jar'
+
+jenkins_support_binary:
+  - 'wrapper'
+  - 'jenkins.init'
+
+jenkins_conf:
+  - 'wrapper.conf'

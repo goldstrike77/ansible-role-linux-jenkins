@@ -1,0 +1,20 @@
+[Unit]
+Description=Jenkins Continuous build server
+After=network.target
+
+[Service]
+Type=forking
+ExecStart={{ jenkins_path }}/jenkins/bin/jenkins.init start sysd
+ExecStop={{ jenkins_path }}/jenkins/bin/jenkins.init stop sysd
+User={{ jenkins_arg.user }}
+LimitNOFILE={{ jenkins_arg.ulimit_nofile }}
+LimitNPROC={{ jenkins_arg.ulimit_nproc }}
+LimitCORE=infinity
+LimitMEMLOCK=infinity
+KillMode=control-group
+Environment=SYSTEMD_KILLMODE_WARNING=true
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target

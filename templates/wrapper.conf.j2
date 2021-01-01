@@ -1,0 +1,104 @@
+#********************************************************************
+# Wrapper Java Properties
+#********************************************************************
+# Java Application
+set.LC_CTYPE={{ jenkins_arg.lc_ctype }}
+set.JAVA_HOME={{ jenkins_java_home }}
+set.JENKINS_HOME={{ jenkins_path }}/jenkins
+wrapper.java.command=%JAVA_HOME%/bin/java
+wrapper.port.min={{ jenkins_port.wrapper.split('-')[0] }}
+wrapper.port.max={{ jenkins_port.wrapper.split('-')[1] }}
+wrapper.jvm.port.min={{ jenkins_port.wrapper_jvm.split('-')[0] }}
+wrapper.jvm.port.max={{ jenkins_port.wrapper_jvm.split('-')[1] }}
+wrapper.javaio.use_thread=TRUE
+wrapper.javaio.buffer_size=10485760
+
+# Limit the use of system-wide resources.
+wrapper.ulimit.nproc.soft={{ jenkins_arg.ulimit_nproc }}
+wrapper.ulimit.nproc.hard={{ jenkins_arg.ulimit_nproc }}
+wrapper.ulimit.nofile.soft={{ jenkins_arg.ulimit_nofile }}
+wrapper.ulimit.nofile.hard={{ jenkins_arg.ulimit_nofile }}
+wrapper.ulimit.core.soft=unlimited
+wrapper.ulimit.core.hard=unlimited
+wrapper.ulimit.loglevel=STATUS
+
+# Tell the Wrapper to log the full generated Java command line.
+wrapper.java.command.loglevel=NONE
+
+# Java Main class.  This class must implement the WrapperListener interface
+#  or guarantee that the WrapperManager class is initialized.  Helper
+#  classes are provided to do this for you.  See the Integration section
+#  of the documentation for details.
+wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp
+
+# Java Classpath (include wrapper.jar)  Add class path elements as
+#  needed starting from 1
+wrapper.java.classpath.1 = %JENKINS_HOME%/libs/jenkins.war
+wrapper.java.classpath.2 = %JENKINS_HOME%/libs/wrapper.jar
+
+# Java Library Path (location of Wrapper.DLL or libwrapper.so)
+wrapper.java.library.path.1 = %JENKINS_HOME%/libs
+
+# Java Bits.  On applicable platforms, tells the JVM to run in 32 or 64-bit mode.
+wrapper.java.additional.auto_bits=TRUE
+
+# Java Additional Parameters
+wrapper.java.additional.1  = -server
+wrapper.java.additional.2  = -Dcom.sun.akuma.Daemon=daemonized
+wrapper.java.additional.3  = -Djava.awt.headless=true
+wrapper.java.additional.4  = -DJENKINS_HOME=%JENKINS_HOME%
+wrapper.java.additional.5  = -Djava.io.tmpdir=%JENKINS_HOME%/tmp
+wrapper.java.additional.6  = -Duser.timezone={{ jenkins_arg.timezone }}
+
+# Initial Java Heap Size (in MB)
+wrapper.java.initmemory={{ jenkins_jvm_xmx }}
+
+# Maximum Java Heap Size (in MB)
+wrapper.java.maxmemory={{ jenkins_jvm_xmx }}
+
+# Application parameters.  Add parameters as needed starting from 1
+wrapper.app.parameter.1 = Main
+wrapper.app.parameter.2 = --httpPort={{ jenkins_port.http }}
+
+#********************************************************************
+# Wrapper Logging Properties
+#********************************************************************
+# Enables Debug output from the Wrapper.
+# wrapper.debug=TRUE
+
+# Format of output for the console.  (See docs for formats)
+wrapper.console.format={{ jenkins_arg.wrapper_console_format }}
+
+# Log Level for console output.  (See docs for log levels)
+wrapper.console.loglevel={{ jenkins_arg.wrapper_console_loglevel }}
+
+# Log file to use for wrapper output logging.
+wrapper.logfile=%JENKINS_HOME%/logs/{{ jenkins_arg.wrapper_logfile }}
+
+# Format of output for the log file.  (See docs for formats)
+wrapper.logfile.format={{ jenkins_arg.wrapper_logfile_format }}
+
+# Log Level for log file output.  (See docs for log levels)
+wrapper.logfile.loglevel={{ jenkins_arg.wrapper_logfile_loglevel }}
+
+# Maximum size that the log file will be allowed to grow to before
+#  the log is rolled. Size is specified in bytes.  The default value
+#  of 0, disables log rolling.  May abbreviate with the 'k' (kb) or
+#  'm' (mb) suffix.  For example: 10m = 10 megabytes.
+wrapper.logfile.maxsize={{ jenkins_arg.wrapper_logfile_maxsize }}
+
+# Maximum number of rolled log files which will be allowed before old
+#  files are deleted.  The default value of 0 implies no limit.
+wrapper.logfile.maxfiles={{ jenkins_arg.wrapper_logfile_maxfiles }}
+
+# Log Level for sys/event log output.  (See docs for log levels)
+wrapper.syslog.loglevel={{ jenkins_arg.wrapper_syslog_loglevel }}
+
+#********************************************************************
+# Wrapper General Properties
+#********************************************************************
+# Allow for the use of non-contiguous numbered properties
+wrapper.ignore_sequence_gaps=TRUE
+
+# Title to use when running as a console
+wrapper.console.title=@app.long.name@
