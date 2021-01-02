@@ -1,0 +1,22 @@
+---
+- name: Install Jenkins plugins.
+  jenkins_plugin:
+    url: 'https://{{ ansible_default_ipv4.address }}:{{ jenkins_port.https }}'
+    url_username: '{{ jenkins_admin_user }}'
+    url_password: '{{ jenkins_admin_pass }}'
+    name: '{{ item.name }}'
+    version: '{{ item.version }}'
+    jenkins_home: '{{ jenkins_path }}/jenkins'
+    state: 'present'
+    owner: '{{ jenkins_arg.user }}'
+    group: '{{ jenkins_arg.user }}'
+    mode: '0640'
+    updates_url: '{{ jenkins_soft_url }}'
+    timeout: '1200'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ ansible_default_ipv4.address }}'
+  loop: '{{ jenkins_plugins }}'
+  no_log: true
+  notify:
+    - Restart Jenkins service.

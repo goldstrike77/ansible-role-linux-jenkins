@@ -23,6 +23,8 @@
     - 'libs'
     - 'logs'
     - 'tmp'
+    - 'init.groovy.d'
+    - 'ssl'
 
 - name: Download Jenkins Web Application Resource file.
   get_url:
@@ -37,21 +39,16 @@
   until: jenkins_upgrade is succeeded
   retries: 5
   delay: 2
+  notify:
+    - Restart Jenkins service.
 
 - name: Install Jenkins support binary package.
   copy:
-    src: '{{ item }}'
-    dest: '{{ jenkins_path }}/jenkins/bin/'
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
     owner: '{{ jenkins_arg.user }}'
     group: '{{ jenkins_arg.user }}'
     mode: '750'
-  loop: '{{ jenkins_support_binary }}'
-
-- name: Install Jenkins support library package.
-  copy:
-    src: '{{ item }}'
-    dest: '{{ jenkins_path }}/jenkins/libs/'
-    owner: '{{ jenkins_arg.user }}'
-    group: '{{ jenkins_arg.user }}'
-    mode: '640'
-  loop: '{{ jenkins_support_jars }}'
+  loop: '{{ jenkins_script }}'
+  notify:
+    - Restart Jenkins service.

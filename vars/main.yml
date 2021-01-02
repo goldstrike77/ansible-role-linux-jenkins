@@ -1,13 +1,21 @@
 ---
+jenkins_java_home: '/usr/lib/jvm/java' # Environment variable to point to an installed JDK.
+
 jenkins_soft_url: 'http://mirrors.tuna.tsinghua.edu.cn/jenkins'
 
-jenkins_support_jars:
-  - 'libwrapper.so'
-  - 'wrapper.jar'
-
-jenkins_support_binary:
-  - 'wrapper'
-  - 'jenkins.init'
+jenkins_script:
+  - { src: 'libwrapper.so', dest: '{{ jenkins_path }}/jenkins/libs' }
+  - { src: 'wrapper.jar', dest: '{{ jenkins_path }}/jenkins/libs' }
+  - { src: 'wrapper', dest: '{{ jenkins_path }}/jenkins/bin' }
+  - { src: 'jenkins.init', dest: '{{ jenkins_path }}/jenkins/bin' }
 
 jenkins_conf:
-  - 'wrapper.conf'
+  - { src: 'wrapper.conf', dest: '{{ jenkins_path }}/jenkins/conf/wrapper.conf', mode: '640', owner: '{{ jenkins_arg.user }}' }
+  - { src: 'security.groovy', dest: '{{ jenkins_path }}/jenkins/init.groovy.d/security.groovy', mode: '640', owner: '{{ jenkins_arg.user }}', create: '{{ jenkins_node_status.status != 200 }}' }
+  - { src: 'jenkins.service', dest: '/lib/systemd/system/jenkins.service', mode: '644', owner: 'root' }
+
+jenkins_python_dependent_packages:
+  - 'pip'
+  - 'cryptography'
+
+jenkins_pypi_url: 'pypi.tuna.tsinghua.edu.cn'

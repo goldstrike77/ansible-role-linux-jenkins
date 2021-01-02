@@ -5,15 +5,50 @@
 - name: Include firewall tasks.
   include: 'firewall.yml'
 
+- name: Checking for Jenkins node status.
+  uri:
+    url: 'https://{{ ansible_default_ipv4.address }}:{{ jenkins_port.https }}/login'
+    method: 'HEAD'
+    validate_certs: 'no'
+    status_code: '-1,200'
+    headers:
+      X-Requested-By: '{{ ansible_default_ipv4.address }}'
+      cache-control: 'no-cache'
+  environment:
+    no_proxy: '{{ ansible_default_ipv4.address }}'
+  register: jenkins_node_status
+
 - name: Include installation tasks.
   include: 'install.yml'
-  notify:
-    - Restart Jenkins service.
 
 - name: Include configuration tasks.
   include: 'configureation.yml'
-  notify:
-    - Restart Jenkins service.
+
+- name: Include certificate tasks.
+  include: 'certificates.yml'
 
 - name: Flush handlers.
   meta: flush_handlers
+
+- name: Check if Jenkins performed the action check updates successfully.
+  stat:
+    path: '{{ jenkins_path }}/jenkins/updates/hudson.tasks.Maven.MavenInstaller'
+  register: jenkins_update_result
+  until: jenkins_update_result.stat.exists
+  retries: 30
+  delay: 30
+
+- name: Include plugins update task.
+  include: 'plugin.yml'
+
+- name: Remove Jenkins security scripts after startup.
+  file:
+    path: '{{ jenkins_path }}/jenkins/init.groovy.d/security.groovy'
+    state: 'absent'
+  when: jenkins_node_status.status != 200
+
+- name: Registered with HashiCorp Consul.
+  include: 'register.yml'
+  when:
+    - exporter_is_install | bool
+    - consul_public_register | bool

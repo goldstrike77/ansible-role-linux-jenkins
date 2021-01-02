@@ -1,0 +1,67 @@
+---
+- name: Check private key exists.
+  stat:
+    path: '{{ jenkins_path }}/jenkins/ssl/server.key'
+  register: check_cert_keys
+
+- name: Certificate Signing operation.
+  block:
+    - name: Install requirement python package.
+      pip:
+        name: '{{ jenkins_python_dependent_packages }}'
+        state: 'forcereinstall'
+        extra_args: '--default-timeout=120 --ignore-installed -i https://{{ jenkins_pypi_url }}/simple --trusted-host {{ jenkins_pypi_url }}'
+      register: jenkins_python_status
+      until: jenkins_python_status is succeeded
+      retries: 5
+      delay: 2
+    - name: Selfsigned CA file transfer.
+      copy:
+        src: 'ssl/{{ item }}'
+        dest: '{{ jenkins_path }}/jenkins/ssl/{{ item }}'
+        owner: '{{ jenkins_arg.user }}'
+        mode: '640'
+      loop:
+        - 'ca-cert.pem'
+        - 'ca-key.pem'
+    - name: Generate an OpenSSL private key.
+      openssl_privatekey:
+        path: '{{ jenkins_path }}/jenkins/ssl/server.key'
+        select_crypto_backend: 'cryptography'
+        size: '4096'
+        type: 'RSA'
+        owner: '{{ jenkins_arg.user }}'
+        mode: '640'
+        state: 'present'
+    - name: Generate an OpenSSL Certificate Signing Request.
+      openssl_csr:
+        path: '{{ jenkins_path }}/jenkins/ssl/server.csr'
+        privatekey_path: '{{ jenkins_path }}/jenkins/ssl/server.key'
+        select_crypto_backend: 'cryptography'
+        common_name: 'Server'
+        subject_alt_name:
+          - 'DNS:{{ ansible_hostname }}'
+          - 'DNS:{{ ansible_fqdn }}'
+          - 'DNS:{{ ansible_default_ipv4.address }}'
+          - 'DNS:*.service.{{ datacenter }}.{{ domain }}'
+          - 'IP:{{ ansible_default_ipv4.address }}'
+        owner: '{{ jenkins_arg.user }}'
+        mode: '640'
+        state: 'present'
+    - name: Generate an OpenSSL certificate signed with your own CA certificate.
+      openssl_certificate:
+        path: '{{ jenkins_path }}/jenkins/ssl/server.crt'
+        csr_path: '{{ jenkins_path }}/jenkins/ssl/server.csr'
+        ownca_path: '{{ jenkins_path }}/jenkins/ssl/ca-cert.pem'
+        ownca_privatekey_path: '{{ jenkins_path }}/jenkins/ssl/ca-key.pem'
+        select_crypto_backend: 'cryptography'
+        ownca_not_after: '+7305d'
+        provider: 'ownca'
+        owner: '{{ jenkins_arg.user }}'
+        mode: '640'
+        state: 'present'
+    - name: Assemble the certificate and private key.
+      shell: 'cat {{ jenkins_path }}/jenkins/ssl/server.crt {{ jenkins_path }}/jenkins/ssl/ca-cert.pem >> {{ jenkins_path }}/jenkins/ssl/certificate.pem'
+      become: 'yes'
+      become_user: '{{ jenkins_arg.user }}'
+  when: not check_cert_keys.stat.exists or check_cert_keys.stat.size == 0

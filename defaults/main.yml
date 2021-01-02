@@ -3,10 +3,19 @@
 jenkins_is_install: false # A boolean to determine whether or not to install the Jenkins.
 jenkins_version: '2.263.1' # Specify the Jenkins version.
 jenkins_path: '/data' # Specify the Jenkins working directory.
-jenkins_java_home: '/usr/lib/jvm/java' # Environment variable to point to an installed JDK.
+jenkins_admin_user: 'admin' # The default administrator username.
+jenkins_admin_pass: 'changeme' # The password for administrator.
+jenkins_force_https: true # A boolean to determine whether or not to Encrypting HTTP client communications.
 
 # JVM memory Variables #
 jenkins_jvm_xmx: '2048' # Size of the heap in MB.
+
+# Plugin Variables #
+jenkins_plugins: # Lists the plugins for installs.
+  - name: 'ansible'
+    version: 'latest'
+  - name: 'prometheus'
+    version: 'latest'
 
 # Listen port #
 jenkins_port:
@@ -17,6 +26,7 @@ jenkins_port:
 
 # System Variables #
 jenkins_arg:
+  timeout: '10' # Sets the http session timeout value for minutes.
   lc_ctype: 'zh_CN.UTF-8' # The language of messages.
   timezone: 'Asia/Shanghai' # Default timezone for a single instance of a running JVM.
   user: 'jenkins' # Jenkins running user.
