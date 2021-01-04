@@ -12,7 +12,7 @@ __Table of Contents__
 - [Overview](#overview)
 - [Requirements](#requirements)
   * [Operating systems](#operating-systems)
-  * [jenkins Versions](#jenkins-versions)
+  * [Versions](#jenkins-versions)
 - [ Role variables](#Role-variables)
   * [Main Configuration](#Main-parameters)
   * [Other Configuration](#Other-parameters)
@@ -34,17 +34,16 @@ This Ansible role installs Jenkins on the Linux operating system, including esta
 
   * CentOS 7
 
-### jenkins versions
+### Jenkins versions
 
 The following list of supported the Jenkins releases:
 
-* Jenkins 2.x LTS
+* LTS 2.x
 
 ## Role variables
 ### Main parameters #
 There are some variables in defaults/main.yml which can (Or needs to) be overridden:
 ##### General parameters
-* `jenkins_is_install`: A boolean to determine whether or not to install the Jenkins.
 * `jenkins_version`: Specify the Jenkins version.
 * `jenkins_path`: Specify the Jenkins working directory.
 * `jenkins_admin_user`: The default administrator username.
