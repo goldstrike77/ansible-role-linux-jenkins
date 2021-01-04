@@ -12,11 +12,13 @@
     group: '{{ jenkins_arg.user }}'
     mode: '0640'
     updates_url: '{{ jenkins_soft_url }}'
-    timeout: '1200'
+    timeout: '3600'
+    use_proxy: 'no'
     validate_certs: 'no'
   environment:
-    no_proxy: '{{ ansible_default_ipv4.address }}'
+    no_proxy: '*'
   loop: '{{ jenkins_plugins }}'
+  failed_when: false
   no_log: true
   notify:
     - Restart Jenkins service.

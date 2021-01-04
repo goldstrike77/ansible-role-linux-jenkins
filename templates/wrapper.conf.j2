@@ -58,15 +58,17 @@ wrapper.java.initmemory={{ jenkins_jvm_xmx }}
 wrapper.java.maxmemory={{ jenkins_jvm_xmx }}
 
 # Application parameters.  Add parameters as needed starting from 1
-wrapper.app.parameter.1 = Main
-wrapper.app.parameter.2 = --sessionTimeout={{ jenkins_arg.timeout }}
-wrapper.app.parameter.3 = --httpPort={% if jenkins_force_https | bool %}-1{% else %}jenkins_port.http{% endif %}
+wrapper.app.parameter.1  = Main
+wrapper.app.parameter.2  = --sessionTimeout={{ jenkins_arg.timeout }}
+wrapper.app.parameter.3  = --httpPort={% if jenkins_force_https | bool %}-1{% else %}jenkins_port.http{% endif %}
 
-wrapper.app.parameter.4 = --httpListenAddress={{ ansible_default_ipv4.address }}
-wrapper.app.parameter.5 = --httpsPort={{ jenkins_port.https }}
-wrapper.app.parameter.6 = --httpsListenAddress={{ ansible_default_ipv4.address }}
-wrapper.app.parameter.7 = --httpsCertificate={{ jenkins_path }}/jenkins/ssl/certificate.pem
-wrapper.app.parameter.8 = --httpsPrivateKey={{ jenkins_path }}/jenkins/ssl/server.key
+wrapper.app.parameter.4  = --httpListenAddress={{ ansible_default_ipv4.address }}
+wrapper.app.parameter.5  = --httpsPort={{ jenkins_port.https }}
+wrapper.app.parameter.6  = --httpsListenAddress={{ ansible_default_ipv4.address }}
+wrapper.app.parameter.7  = --httpsCertificate={{ jenkins_path }}/jenkins/ssl/certificate.pem
+wrapper.app.parameter.8  = --httpsPrivateKey={{ jenkins_path }}/jenkins/ssl/server.key
+wrapper.app.parameter.9  = --handlerCountMax=200
+wrapper.app.parameter.10 = --handlerCountMaxIdle=20
 
 #********************************************************************
 # Wrapper Logging Properties

@@ -16,6 +16,8 @@ jenkins_plugins: # Lists the plugins for installs.
     version: 'latest'
   - name: 'prometheus'
     version: 'latest'
+  - name: 'github'
+    version: 'latest'
 
 # Listen port #
 jenkins_port:

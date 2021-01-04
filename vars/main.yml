@@ -1,7 +1,7 @@
 ---
-jenkins_java_home: '/usr/lib/jvm/java' # Environment variable to point to an installed JDK.
+jenkins_java_home: '/usr/lib/jvm/java'
 
-jenkins_soft_url: 'http://mirrors.tuna.tsinghua.edu.cn/jenkins'
+jenkins_soft_url: 'http://mirrors.aliyun.com/jenkins'
 
 jenkins_script:
   - { src: 'libwrapper.so', dest: '{{ jenkins_path }}/jenkins/libs' }
