@@ -5,7 +5,7 @@
     url_username: '{{ jenkins_admin_user }}'
     url_password: '{{ jenkins_admin_pass }}'
     name: '{{ item.name }}'
-    version: '{{ item.version }}'
+    version: '{{ item.version | default("latest") }}'
     jenkins_home: '{{ jenkins_path }}/jenkins'
     state: 'present'
     owner: '{{ jenkins_arg.user }}'

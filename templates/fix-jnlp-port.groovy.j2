@@ -1,0 +1,3 @@
+def instance=jenkins.model.Jenkins.instance
+instance.setSlaveAgentPort({{ jenkins_port.jnlp }})
+instance.save()

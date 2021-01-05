@@ -39,6 +39,7 @@
   until: jenkins_upgrade is succeeded
   retries: 5
   delay: 2
+  when: jenkins_nodes[0] in ansible_default_ipv4.address
   notify:
     - Restart Jenkins service.
 

@@ -30,7 +30,7 @@ Jenkins is a free and open-source automation server. It helps automate the parts
 
 ## Requirements
 ### Operating systems
-This Ansible role installs Jenkins on the Linux operating system, including establishing a filesystem structure and server configuration with some common operational features. This role will work on the following operating systems:
+This Ansible role installs stand-alone and distributed(Swarm client) Jenkins on the Linux operating system, including establishing a filesystem structure and server configuration with some common operational features, Will work on the following operating systems:
 
   * CentOS 7
 
@@ -54,8 +54,9 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `jenkins_jvm_xmx`: Size of the heap in MB.
 
 ##### Listen port
-* `jenkins_port.http`: http port number.
-* `jenkins_port.https`: https port number.
+* `jenkins_port.jnlp`: TCP port for inbound agents.
+* `jenkins_port.http`: TCP port for http.
+* `jenkins_port.https`: TCP port for https.
 * `jenkins_port.wrapper`: A socket to communicate with its Java component running inside a JVM.
 * `jenkins_port.wrapper_jvm`: A socket to communicate with its Java component running inside a JVM.
 
@@ -127,11 +128,14 @@ jenkins_admin_pass: 'changeme'
 jenkins_force_https: true
 jenkins_jvm_xmx: '2048'
 jenkins_plugins:
+  - name: 'prometheus'
+  - name: 'swarm'
   - name: 'ansible'
     version: 'latest'
-  - name: 'prometheus'
+  - name: 'github'
     version: 'latest'
 jenkins_port:
+  jnlp: '50000'
   http: '8080'
   https: '8443'
   wrapper: '35000-35999'

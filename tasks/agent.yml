@@ -1,0 +1,16 @@
+---
+- name: Download Jenkins agent Application Resource file.
+  get_url:
+    url: 'https://{{ jenkins_nodes[0] }}:{{ jenkins_port.https }}/swarm/swarm-client.jar'
+    dest: '{{ jenkins_path }}/jenkins/libs/swarm-client.jar'
+    owner: '{{ jenkins_arg.user }}'
+    group: '{{ jenkins_arg.user }}'
+    mode: '640'
+    validate_certs: 'no'
+    timeout: '60'
+  register: jenkins_upgrade
+  until: jenkins_upgrade is succeeded
+  retries: 10
+  delay: 2
+  notify:
+    - Restart Jenkins service.

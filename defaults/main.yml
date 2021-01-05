@@ -12,17 +12,18 @@ jenkins_jvm_xmx: '2048' # Size of the heap in MB.
 
 # Plugin Variables #
 jenkins_plugins: # Lists the plugins for installs.
-  - name: 'ansible'
-    version: 'latest'
   - name: 'prometheus'
+  - name: 'swarm'
+  - name: 'ansible'
     version: 'latest'
   - name: 'github'
     version: 'latest'
 
 # Listen port #
 jenkins_port:
-  http: '8080' # http port number.
-  https: '8443' # https port number.
+  jnlp: '50000' # TCP port for inbound agents.
+  http: '8080' # TCP port for http.
+  https: '8443' # TCP port for https.
   wrapper: '35000-35999' # A socket to communicate with its Java component running inside a JVM.
   wrapper_jvm: '36000-36999' # A socket to communicate with its Java component running inside a JVM.
 

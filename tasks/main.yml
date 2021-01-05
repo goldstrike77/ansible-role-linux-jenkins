@@ -16,7 +16,16 @@
       cache-control: 'no-cache'
   environment:
     no_proxy: '{{ ansible_default_ipv4.address }}'
+  when: jenkins_nodes[0] in ansible_default_ipv4.address
   register: jenkins_node_status
+
+- name: Set the Jenkins master status.
+  set_fact:
+    jenkins_master_status: '{{ jenkins_node_status.status }}'
+  when: jenkins_node_status.status is defined
+  delegate_to: '{{ item }}'
+  delegate_facts: true
+  loop: '{{ groups[group_names[0]] }}'
 
 - name: Include installation tasks.
   include: 'install.yml'
@@ -26,6 +35,7 @@
 
 - name: Include certificate tasks.
   include: 'certificates.yml'
+  when: jenkins_nodes[0] in ansible_default_ipv4.address
 
 - name: Flush handlers.
   meta: flush_handlers
@@ -37,18 +47,28 @@
   until: jenkins_update_result.stat.exists
   retries: 30
   delay: 30
+  when: jenkins_nodes[0] in ansible_default_ipv4.address
 
 - name: Include plugins update task.
   include: 'plugin.yml'
+  when: jenkins_nodes[0] in ansible_default_ipv4.address
+
+- name: Flush handlers.
+  meta: flush_handlers
 
 - name: Remove Jenkins security scripts after startup.
   file:
     path: '{{ jenkins_path }}/jenkins/init.groovy.d/security.groovy'
     state: 'absent'
-  when: jenkins_node_status.status != 200
+  when: jenkins_master_status != "200"
 
 - name: Registered with HashiCorp Consul.
   include: 'register.yml'
   when:
     - exporter_is_install | bool
     - consul_public_register | bool
+    - jenkins_nodes[0] in ansible_default_ipv4.address
+
+- name: Include agent task.
+  include: 'agent.yml'
+  when: jenkins_nodes[0] not in ansible_default_ipv4.address

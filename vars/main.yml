@@ -11,7 +11,8 @@ jenkins_script:
 
 jenkins_conf:
   - { src: 'wrapper.conf', dest: '{{ jenkins_path }}/jenkins/conf/wrapper.conf', mode: '640', owner: '{{ jenkins_arg.user }}' }
-  - { src: 'security.groovy', dest: '{{ jenkins_path }}/jenkins/init.groovy.d/security.groovy', mode: '640', owner: '{{ jenkins_arg.user }}', create: '{{ jenkins_node_status.status != 200 }}' }
+  - { src: 'fix-jnlp-port.groovy', dest: '{{ jenkins_path }}/jenkins/init.groovy.d/fix-jnlp-port.groovy', mode: '640', owner: '{{ jenkins_arg.user }}' }
+  - { src: 'security.groovy', dest: '{{ jenkins_path }}/jenkins/init.groovy.d/security.groovy', mode: '640', owner: '{{ jenkins_arg.user }}', create: '{{ jenkins_master_status != "200" }}' }
   - { src: 'jenkins.service', dest: '/lib/systemd/system/jenkins.service', mode: '644', owner: 'root' }
 
 jenkins_python_dependent_packages:
@@ -19,3 +20,10 @@ jenkins_python_dependent_packages:
   - 'cryptography'
 
 jenkins_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
+
+jenkins_nodes: "\
+  {% set _jenkins_nodes = [] %}\
+  {% for host in groups[group_names[0]] %}\
+    {% if _jenkins_nodes.append(hostvars[host]['ansible_host']) %}{% endif %}\
+  {% endfor %}\
+  {{ _jenkins_nodes }}"
