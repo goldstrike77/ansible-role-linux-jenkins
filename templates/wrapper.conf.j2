@@ -20,10 +20,10 @@ wrapper.ulimit.nofile.soft={{ jenkins_arg.ulimit_nofile }}
 wrapper.ulimit.nofile.hard={{ jenkins_arg.ulimit_nofile }}
 wrapper.ulimit.core.soft=unlimited
 wrapper.ulimit.core.hard=unlimited
-wrapper.ulimit.loglevel=STATUS
+wrapper.ulimit.loglevel={{ jenkins_arg.wrapper_ulimit_loglevel }}
 
 # Tell the Wrapper to log the full generated Java command line.
-wrapper.java.command.loglevel=NONE
+wrapper.java.command.loglevel={{ jenkins_arg.wrapper_java_command_loglevel }}
 
 # Java Main class.  This class must implement the WrapperListener interface
 #  or guarantee that the WrapperManager class is initialized.  Helper
@@ -43,13 +43,17 @@ wrapper.java.library.path.1 = %JENKINS_HOME%/libs
 wrapper.java.additional.auto_bits=TRUE
 
 # Java Additional Parameters
-wrapper.java.additional.1  = -server
-wrapper.java.additional.2  = -Dcom.sun.akuma.Daemon=daemonized
-wrapper.java.additional.3  = -Djava.awt.headless=true
-wrapper.java.additional.4  = -DJENKINS_HOME=%JENKINS_HOME%
-wrapper.java.additional.5  = -Djava.io.tmpdir=%JENKINS_HOME%/tmp
-wrapper.java.additional.6  = -Duser.timezone={{ jenkins_arg.timezone }}
-wrapper.java.additional.7  = -Djenkins.install.runSetupWizard=false
+wrapper.java.additional.1 = -server
+wrapper.java.additional.2 = -Dcom.sun.akuma.Daemon=daemonized
+wrapper.java.additional.3 = -Djava.awt.headless=true
+wrapper.java.additional.4 = -DJENKINS_HOME=%JENKINS_HOME%
+wrapper.java.additional.5 = -Djava.io.tmpdir=%JENKINS_HOME%/tmp
+wrapper.java.additional.6 = -Duser.timezone={{ jenkins_arg.timezone }}
+wrapper.java.additional.7 = -Djenkins.install.runSetupWizard=false
+{% if not ansible_default_ipv6 | length > 0 %}
+wrapper.java.additional.8 = -Djava.net.preferIPv4Addresses
+wrapper.java.additional.9 = -Djava.net.preferIPv4Stack=true
+{% endif %}
 
 # Initial Java Heap Size (in MB)
 wrapper.java.initmemory={{ jenkins_jvm_xmx }}
