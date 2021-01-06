@@ -10,7 +10,9 @@
     timeout: '60'
   register: jenkins_upgrade
   until: jenkins_upgrade is succeeded
-  retries: 10
+  retries: 5
   delay: 2
   notify:
     - Restart Jenkins service.
+
+

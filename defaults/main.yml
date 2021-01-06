@@ -29,7 +29,7 @@ jenkins_port:
 
 # System Variables #
 jenkins_arg:
-  timeout: '10' # Sets the http session timeout value for minutes.
+  timeout: '20' # Sets the http session timeout value for minutes.
   lc_ctype: 'zh_CN.UTF-8' # The language of messages.
   timezone: 'Asia/Shanghai' # Default timezone for a single instance of a running JVM.
   user: 'jenkins' # Jenkins running user.

@@ -12,7 +12,8 @@ jenkins_script:
 jenkins_conf:
   - { src: 'wrapper.conf', dest: '{{ jenkins_path }}/jenkins/conf/wrapper.conf', mode: '640', owner: '{{ jenkins_arg.user }}' }
   - { src: 'fix-jnlp-port.groovy', dest: '{{ jenkins_path }}/jenkins/init.groovy.d/fix-jnlp-port.groovy', mode: '640', owner: '{{ jenkins_arg.user }}' }
-  - { src: 'security.groovy', dest: '{{ jenkins_path }}/jenkins/init.groovy.d/security.groovy', mode: '640', owner: '{{ jenkins_arg.user }}', create: '{{ jenkins_master_status != "200" }}' }
+  - { src: 'deny-anonymous-read.groovy', dest: '{{ jenkins_path }}/jenkins/init.groovy.d/deny-anonymous-read.groovy', mode: '640', owner: '{{ jenkins_arg.user }}' }
+  - { src: 'admin.groovy', dest: '{{ jenkins_path }}/jenkins/init.groovy.d/admin.groovy', mode: '640', owner: '{{ jenkins_arg.user }}', create: '{{ jenkins_master_status != "200" }}' }
   - { src: 'jenkins.service', dest: '/lib/systemd/system/jenkins.service', mode: '644', owner: 'root' }
 
 jenkins_python_dependent_packages:

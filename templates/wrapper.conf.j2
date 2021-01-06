@@ -90,6 +90,10 @@ wrapper.app.parameter.8  = -name
 wrapper.app.parameter.9  = {{ ansible_hostname | lower }}
 wrapper.app.parameter.10 = -disableSslVerification
 wrapper.app.parameter.11 = -disableClientsUniqueId
+wrapper.app.parameter.12 = -prometheusPort
+wrapper.app.parameter.13 = {{ jenkins_port.http }}
+wrapper.app.parameter.14 = -labels
+wrapper.app.parameter.15 = {{ ansible_system }}
 {% endif %}
 
 #********************************************************************

@@ -58,7 +58,7 @@
 
 - name: Remove Jenkins security scripts after startup.
   file:
-    path: '{{ jenkins_path }}/jenkins/init.groovy.d/security.groovy'
+    path: '{{ jenkins_path }}/jenkins/init.groovy.d/admin.groovy'
     state: 'absent'
   when: jenkins_master_status != "200"
 
@@ -67,8 +67,7 @@
   when:
     - exporter_is_install | bool
     - consul_public_register | bool
-    - jenkins_nodes[0] in ansible_default_ipv4.address
 
-- name: Include agent task.
+- name: Include Jenkins agent task.
   include: 'agent.yml'
   when: jenkins_nodes[0] not in ansible_default_ipv4.address
