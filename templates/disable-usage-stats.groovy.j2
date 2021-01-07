@@ -1,0 +1,16 @@
+#!groovy
+import hudson.security.*
+import jenkins.model.*
+
+def instance = Jenkins.getInstance()
+
+// Disable usage statistics
+if(instance.isUsageStatisticsCollected()){
+    instance.setNoUsageStatistics(true)
+    println 'Disabled submitting usage stats to Jenkins project.'
+}
+else {
+    println 'Nothing changed.  Usage stats are not submitted to the Jenkins project.'
+}
+
+instance.save()

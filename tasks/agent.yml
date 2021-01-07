@@ -14,5 +14,3 @@
   delay: 2
   notify:
     - Restart Jenkins service.
-
-

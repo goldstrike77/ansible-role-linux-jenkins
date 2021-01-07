@@ -5,7 +5,7 @@
 - name: Include firewall tasks.
   include: 'firewall.yml'
 
-- name: Checking for Jenkins node status.
+- name: Checking for Jenkins master status.
   uri:
     url: 'https://{{ ansible_default_ipv4.address }}:{{ jenkins_port.https }}/login'
     method: 'HEAD'
@@ -17,15 +17,7 @@
   environment:
     no_proxy: '{{ ansible_default_ipv4.address }}'
   when: jenkins_nodes[0] in ansible_default_ipv4.address
-  register: jenkins_node_status
-
-- name: Set the Jenkins master status.
-  set_fact:
-    jenkins_master_status: '{{ jenkins_node_status.status }}'
-  when: jenkins_node_status.status is defined
-  delegate_to: '{{ item }}'
-  delegate_facts: true
-  loop: '{{ groups[group_names[0]] }}'
+  register: jenkins_master_status
 
 - name: Include installation tasks.
   include: 'install.yml'
@@ -56,11 +48,14 @@
 - name: Flush handlers.
   meta: flush_handlers
 
-- name: Remove Jenkins security scripts after startup.
+- name: Remove Jenkins init groovy after startup.
   file:
-    path: '{{ jenkins_path }}/jenkins/init.groovy.d/admin.groovy'
+    path: '{{ jenkins_path }}/jenkins/init.groovy.d/{{ item }}.groovy'
     state: 'absent'
-  when: jenkins_master_status != "200"
+  loop: '{{ jenkins_groovy }}'
+  when:
+    - jenkins_nodes[0] in ansible_default_ipv4.address
+    - jenkins_master_status.status != 200
 
 - name: Registered with HashiCorp Consul.
   include: 'register.yml'

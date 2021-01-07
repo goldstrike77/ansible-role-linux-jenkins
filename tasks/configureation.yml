@@ -10,3 +10,17 @@
   when: item.create | default(true) | bool
   notify:
     - Restart Jenkins service.
+
+- name: Jenkins init groovy transfer.
+  template:
+    src: '{{ item }}.groovy.j2'
+    dest: '{{ jenkins_path }}/jenkins/init.groovy.d/{{ item }}.groovy'
+    owner: '{{ jenkins_arg.user }}'
+    group: '{{ jenkins_arg.user }}'
+    mode: '640'
+  loop: '{{ jenkins_groovy }}'
+  when:
+    - jenkins_nodes[0] in ansible_default_ipv4.address
+    - jenkins_master_status.status != 200
+  notify:
+    - Restart Jenkins service.

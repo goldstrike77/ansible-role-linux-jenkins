@@ -12,19 +12,13 @@
 
 - name: Creating Jenkins working folder.
   file:
-    dest: '{{ jenkins_path }}/jenkins/{{ item }}'
+    dest: '{{ jenkins_path }}/jenkins/{{ item.dest }}'
     state: 'directory'
     owner: '{{ jenkins_arg.user }}'
     group: '{{ jenkins_arg.user }}'
     mode: '0750'
-  loop:
-    - 'conf'
-    - 'bin'
-    - 'libs'
-    - 'logs'
-    - 'tmp'
-    - 'init.groovy.d'
-    - 'ssl'
+  loop: '{{ jenkins_folder }}'
+  when: item.create | default(true) | bool
 
 - name: Download Jenkins Web Application Resource file.
   get_url:
