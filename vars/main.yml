@@ -30,7 +30,7 @@ jenkins_groovy:
   - 'fix-jnlp-port'
 
 jenkins_python_dependent_packages:
-  - 'pip'
+  - 'pip==20.3.4'
   - 'cryptography'
 
 jenkins_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
