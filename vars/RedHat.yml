@@ -1,5 +1,6 @@
 ---
 jenkins_dependent_packages:
+  - 'git'
   - 'java-1.8.0-openjdk'
   - 'java-1.8.0-openjdk-devel'
   - 'python-pip'
