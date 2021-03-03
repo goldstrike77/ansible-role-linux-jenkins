@@ -10,7 +10,7 @@
       pip:
         name: '{{ jenkins_python_dependent_packages }}'
         state: 'forcereinstall'
-        extra_args: '--default-timeout=120 --ignore-installed -i https://{{ jenkins_pypi_url }}/simple --trusted-host {{ jenkins_pypi_url }}'
+        extra_args: '--default-timeout=120 -i https://{{ jenkins_pypi_url }}/simple --trusted-host {{ jenkins_pypi_url }}'
       register: jenkins_python_status
       until: jenkins_python_status is succeeded
       retries: 5
