@@ -12,7 +12,7 @@ __Table of Contents__
 - [Overview](#overview)
 - [Requirements](#requirements)
   * [Operating systems](#operating-systems)
-  * [Versions](#jenkins-versions)
+  * [Versions](#versions)
 - [ Role variables](#Role-variables)
   * [Main Configuration](#Main-parameters)
   * [Other Configuration](#Other-parameters)
@@ -35,7 +35,7 @@ This Ansible role installs stand-alone and distributed(Swarm client) Jenkins on 
 
   * CentOS 7
 
-### Jenkins versions
+### Versions
 
 The following list of supported the Jenkins releases:
 
@@ -102,7 +102,6 @@ There are some variables in vars/main.yml:
 ## Dependencies
 - Ansible versions >= 2.8
 - Python >= 2.7.5
-- [Jenkins](https://github.com/goldstrike77/ansible-role-linux-jenkins.git)
 
 ## Example
 
