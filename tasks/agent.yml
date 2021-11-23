@@ -12,5 +12,4 @@
   until: jenkins_upgrade is succeeded
   retries: 5
   delay: 2
-  notify:
-    - Restart Jenkins service.
+  notify: Restart Jenkins service.

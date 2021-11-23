@@ -34,8 +34,7 @@
   retries: 5
   delay: 2
   when: jenkins_nodes[0] in ansible_default_ipv4.address
-  notify:
-    - Restart Jenkins service.
+  notify: Restart Jenkins service.
 
 - name: Install Jenkins support binary package.
   copy:
@@ -45,5 +44,4 @@
     group: '{{ jenkins_arg.user }}'
     mode: '750'
   loop: '{{ jenkins_script }}'
-  notify:
-    - Restart Jenkins service.
+  notify: Restart Jenkins service.

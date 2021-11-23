@@ -1,7 +1,7 @@
 ---
 # General parameters #
 jenkins_is_install: false # A boolean to determine whether or not to install the Jenkins.
-jenkins_version: '2.277.2' # Specify the Jenkins version.
+jenkins_version: '2.303.3' # Specify the Jenkins version.
 jenkins_path: '/data' # Specify the Jenkins working directory.
 jenkins_admin_user: 'admin' # The default administrator username.
 jenkins_admin_pass: 'changeme' # The password for administrator.
@@ -18,6 +18,7 @@ jenkins_plugins: # Lists the plugins for installs.
     version: 'latest'
   - name: 'github'
     version: 'latest'
+  - name: 'ldap'
 
 # Listen port #
 jenkins_port:

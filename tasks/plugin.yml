@@ -20,5 +20,4 @@
   loop: '{{ jenkins_plugins }}'
   failed_when: false
   no_log: true
-  notify:
-    - Restart Jenkins service.
+  notify: Restart Jenkins service.
