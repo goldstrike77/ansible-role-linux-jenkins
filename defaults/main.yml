@@ -19,6 +19,8 @@ jenkins_plugins: # Lists the plugins for installs.
   - name: 'github'
     version: 'latest'
   - name: 'ldap'
+  - name: 'active-directory'
+  - name: 'cloudbees-disk-usage-simple'
 
 # Listen port #
 jenkins_port:
